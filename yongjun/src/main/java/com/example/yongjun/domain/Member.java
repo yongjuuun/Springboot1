@@ -2,33 +2,26 @@ package com.example.yongjun.domain;
 
 public class Member {
     private Long id;
-    private String Password;
     private String name;
-    private String PhoneNum;
-    private String gender;
+
+    private String password;
+    private String phoneNum;
+    private String email;
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getPhoneNum() {
-        return PhoneNum;
+        return phoneNum;
     }
 
     public void setPhoneNum(String phoneNum) {
-        PhoneNum = phoneNum;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
+        this.phoneNum = phoneNum;
     }
 
     public String getEmail() {
@@ -39,11 +32,7 @@ public class Member {
         this.email = email;
     }
 
-    private String email;
-
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
     public void setId(Long id) {
         this.id = id;
