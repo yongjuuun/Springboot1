@@ -39,6 +39,11 @@ public class MemberService {
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 등록된 번호입니다.");
                 });
+
+        memberRepository.findByEmail(member.getEmail())
+                .ifPresent(m -> {
+                    throw new IllegalStateException("이미 등록된 이메일입니다.");
+                });
     }
 
     //    패스워드 길이 체크
