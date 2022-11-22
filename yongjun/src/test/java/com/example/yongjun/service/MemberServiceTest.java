@@ -47,17 +47,32 @@ public class MemberServiceTest {
     @Test
     public void checkDuplicateMember() {
         Member member1 = new Member();
-        member1.setName("java");
+        member1.setName("java1");
+        member1.setPhoneNum("01012345678");
 
         Member member2 = new Member();
-        member2.setName("java");
+        member2.setName("java2");
+        member2.setPhoneNum("01012348");
 
-        memberService.join(member2);
+        memberService.join(member1);
 
         IllegalStateException e = assertThrows(IllegalStateException.class,
                 () -> memberService.join(member2));
 
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+        assertThat(e.getMessage()).isEqualTo("이미 등록된 번호입니다.");
+    }
 
+    @Test
+    public void checkPassword() {
+        Member member1 = new Member();
+        member1.setPassword("javaJAVA");
+        member1.setName("java");
+
+        memberService.join(member1);
+
+        IllegalStateException e = assertThrows((IllegalStateException.class),
+                () -> memberService.join(member1));
+
+        assertThat(e.getMessage()).isEqualTo("ID 포함 불가");
     }
 }

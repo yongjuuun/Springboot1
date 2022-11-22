@@ -2,10 +2,11 @@ package com.example.yongjun.service;
 
 import com.example.yongjun.domain.Member;
 import com.example.yongjun.repository.MemberRepository;
-import com.example.yongjun.repository.MemoryMemberRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MemberService {
 
@@ -20,14 +21,13 @@ public class MemberService {
     // 회원가입
     // 검증하는 비즈니스 로직 필요
     public Long join(Member member) {
-
-        // 패스워드 검증 -> 짧다 출력( 몇자 이하다 )
-        // 휴대폰 검증 -> 있는 휴대폰이면 에러 메세지
+        checkPassword(member);
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
 
+//    중복 회원 체크
     private void validateDuplicateMember(Member member) {
         // Alert message
         memberRepository.findByName(member.getName())
@@ -41,6 +41,38 @@ public class MemberService {
                 });
     }
 
+    //    패스워드 길이 체크
+    private void checkPassword(Member member) {
+//        if (member.getPassword().length() < 8) {
+//            throw new IllegalStateException("패스워드가 8자 미만입니다.");
+//        }
+
+        // 길이, 영어
+        Pattern passPattern1 = Pattern.compile("^[a-zA-Z].{8,20}$");
+//        Pattern passPattern1 = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$");
+        Matcher passMatcher1 = passPattern1.matcher(member.getPassword());
+
+        if(!passMatcher1.find()){
+            throw new IllegalStateException("패스워드 영문,특수문자,숫자 포함 8자 이상");
+        }
+
+        if(member.getPassword().contains(member.getName())){
+            throw new IllegalStateException("ID 포함 불가");
+        }
+    }
+
+
+    //    비밀번호 재설정 기능
+//    if (폰넘버 or 이름 존재, 일치하면) {
+//        pw 재설정? 예외?
+//    }
+
+//    public String findByPassword(Member member) {
+//        if ( memberRepository.findByName(member.getName()).ifPresent();
+//                });
+//    }
+
+
     public List<Member> findMembers() {
         // secret access 허용 하는 애가 요청 했는지?
         return memberRepository.findAll();
@@ -49,5 +81,4 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
-
 }
